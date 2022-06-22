@@ -13,6 +13,7 @@ from translate import Translator
 data = pd.read_csv('dataset/spam.csv', encoding='latin-1')
 print(data.head())
 
+#deletes unused column and renames
 data = data.drop(["Unnamed: 2", "Unnamed: 3", "Unnamed: 4"], axis=1)
 data = data.rename(columns={"v2" : "text", "v1":"label"})
 print(data[1990:2000])
@@ -24,6 +25,7 @@ nltk.download("punkt")
 import warnings
 warnings.filterwarnings('ignore')
 
+#nuage
 ham_words = ''
 spam_words = ''
 
@@ -58,13 +60,14 @@ plt.axis("off")
 plt.tight_layout(pad=0)
 plt.show()
 
+#convert ham = 0 spam = 1
 data = data.replace(['ham','spam'],[0, 1])
 print(data.head(10))
 
+# remove the punctuations and stopwords(empty word)
 import nltk
 nltk.download('stopwords')
 
-# remove the punctuations and stopwords
 import string
 
 
@@ -76,6 +79,7 @@ def text_process(text):
 
 data['text'] = data['text'].apply(text_process)
 print(data.head())
+
 
 text = pd.DataFrame(data['text'])
 label = pd.DataFrame(data['label'])
@@ -112,6 +116,7 @@ rfc = RandomForestClassifier(n_estimators=31, random_state=111)
 
 #create a dictionary of variables and models
 clfs = {'SVC' : svc,'KN' : knc, 'NB': mnb, 'DT': dtc, 'LR': lrc, 'RF': rfc}
+
 #fit the data onto the models
 def train(clf, features, targets):
     clf.fit(features, targets)
@@ -124,12 +129,12 @@ for k,v in clfs.items():
     pred = predict(v, X_test)
     pred_scores_word_vectors.append((k, [accuracy_score(y_test , pred)]))
 
-#Predictions using TFIDF Vectorizer algorithm
+#Predictions avec TFIDF Vectorizer algorithm
 print(pred_scores_word_vectors)
 
 
 #Model predictions
-#write functions to detect if the message is spam or not
+#predit si spam ou non
 def find(x):
     if x == 1:
         print ("Message is SPAM")
